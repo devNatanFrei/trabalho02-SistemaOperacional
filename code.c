@@ -34,10 +34,7 @@ void verif(int mBit, int time) {
 
     
     }
-    
-
-
-       
+         
 }
 
 
@@ -67,7 +64,7 @@ void initMemory() {
 
 int main() {
     int mBit = 0;
-    int time = 2204;
+    int time = 1216;
 
     initMemory();
     
