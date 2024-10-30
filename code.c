@@ -28,13 +28,13 @@ void verif(int mBit, int time) {
                 frame->time = time;
                 break;
             }
-
+    
+     pont = (pont + 1) % NUM_FRAMES;
+        i++;
 
     
     }
     
-     pont = (pont + 1) % NUM_FRAMES;
-        i++;
 
 
        
