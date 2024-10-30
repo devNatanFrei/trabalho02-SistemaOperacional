@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #define NUM_FRAMES 8 
-#define WORKING_SET_WINDOW 1000
+
 
 typedef struct {
     int mBit;   
@@ -22,7 +22,7 @@ void verif(int mBit, int time) {
 
         if (frame->rBit == 1) {
             frame->rBit = 0;  
-        } else if (frame->rBit == 0) {
+        } else if (frame->rBit == 0 && time > frame->time) {
                 frame->mBit = mBit;
                 frame->rBit = 1;
                 frame->time = time;
@@ -70,6 +70,7 @@ int main() {
     int time = 2204;
 
     initMemory();
+    
     updateMemory(mBit, time);
 
     
