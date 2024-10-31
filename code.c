@@ -64,13 +64,12 @@ void initMemory() {
 
 int main() {
     int mBit = 0;
-    int time = 1216;
-
+ 
     initMemory();
     
-    updateMemory(mBit, time);
+    updateMemory(mBit, 1216);
+    updateMemory(mBit, 2204);
 
-    
     for (int i = 0; i < NUM_FRAMES; i++) {
         printf("Memory %d: mBit = %d, rBit = %d, time = %d\n", i, memory[i].mBit, memory[i].rBit, memory[i].time);
     }
