@@ -33,7 +33,7 @@ void updateMemory(int pageNum, int time) {
             memory[i].rBit = 1; 
             memory[i].lastTime = time;
             found = 1;
-            printf("Página %d já está na memória.\n", pageNum);
+            printf("Pagina %d ja esta na memoria\n", pageNum);
             return;
         }
     }
@@ -53,9 +53,9 @@ void updateMemory(int pageNum, int time) {
             else if (time - frame->lastTime >= K) {
                 if (frame->mBit == 1) {
                
-                    printf("Escrevendo página %d de volta para o disco.\n", frame->pageNum);
+                    printf("Escrevendo pagina %d de volta para o disco\n", frame->pageNum);
                 }
-                printf("Substituindo página %d por %d.\n", frame->pageNum, pageNum);
+                printf("Substituindo pagina %d por %d\n", frame->pageNum, pageNum);
                 frame->pageNum = pageNum;
                 frame->mBit = rand() % 2;
                 frame->rBit = 1;
@@ -68,7 +68,7 @@ void updateMemory(int pageNum, int time) {
 
        
             if (pointer == start) {
-                printf("Nenhuma página fora do conjunto de trabalho, substituindo página %d.\n", memory[pointer].pageNum);
+                printf("Nenhuma pagina fora do conjunto de trabalho substituindo pagina %d\n", memory[pointer].pageNum);
                 memory[pointer].pageNum = pageNum;
                 memory[pointer].mBit = rand() % 2;
                 memory[pointer].rBit = 1;
@@ -92,9 +92,9 @@ int main() {
         updateMemory(pageReferences[i], time);
     }
 
-    printf("\nEstado da memória após as referências:\n");
+    printf("\nEstado da memoria apos as referencias\n");
     for (int i = 0; i < NUM_FRAMES; i++) {
-        printf("Memory %d: Page = %d, mBit = %d, rBit = %d, lastTime = %d\n", 
+        printf("Memory %d Page = %d mBit = %d rBit = %d lastTime = %d\n", 
                 i, memory[i].pageNum, memory[i].mBit, memory[i].rBit, memory[i].lastTime);
     }
 
