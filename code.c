@@ -50,7 +50,7 @@ void updateMemory(int pageNum, int time) {
                 pointer = (pointer + 1) % NUM_FRAMES; 
             }
          
-            else if (time - frame->lastTime >= K) {
+            else if (time - frame->lastTime > K) {
                 if (frame->mBit == 1) {
                
                     printf("Escrevendo pagina %d de volta para o disco\n", frame->pageNum);
