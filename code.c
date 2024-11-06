@@ -6,21 +6,21 @@
 #define K 5 
 
 typedef struct {
-    int mBit;       
-    int rBit;       
-    int lastTime;   
-    int pageNum;    
+    int mBit;
+    int rBit;
+    int lastTime;
+    int pageNum;
 } PageFrame;
 
-int pointer = 0;  
-PageFrame memory[NUM_FRAMES];  
+int pointer = 0;
+PageFrame memory[NUM_FRAMES];
 
 void initMemory() {
     for (int i = 0; i < NUM_FRAMES; i++) {
         memory[i].mBit = 0;
         memory[i].rBit = 0;
         memory[i].lastTime = 0;
-        memory[i].pageNum = -1; 
+        memory[i].pageNum = -1;
     }
 }
 
@@ -29,7 +29,7 @@ void updateMemory(int pageNum, int time) {
 
     for (int i = 0; i < NUM_FRAMES; i++) {
         if (memory[i].pageNum == pageNum) {
-            memory[i].rBit = 1; 
+            memory[i].rBit = 1;
             memory[i].lastTime = time;
             found = 1;
             printf("Pagina %d ja esta na memoria\n", pageNum);
@@ -39,13 +39,12 @@ void updateMemory(int pageNum, int time) {
 
     if (!found) {
         int start = pointer;
-        while (1) {
+        bool replaced = false;
+
+        do {
             PageFrame *frame = &memory[pointer];
 
-            if (frame->rBit == 1) {
-                frame->rBit = 0; 
-                pointer = (pointer + 1) % NUM_FRAMES; 
-            } else if (time - frame->lastTime > K) {
+            if (frame->rBit == 0 && (time - frame->lastTime > K)) {
                 if (frame->mBit == 1) {
                     printf("Escrevendo pagina %d de volta para o disco\n", frame->pageNum);
                 }
@@ -54,14 +53,27 @@ void updateMemory(int pageNum, int time) {
                 frame->mBit = rand() % 2;
                 frame->rBit = 1;
                 frame->lastTime = time;
-                pointer = (pointer + 1) % NUM_FRAMES; 
+                pointer = (pointer + 1) % NUM_FRAMES;
+                replaced = true;
                 break;
+            } else if (frame->rBit == 1) {
+                frame->rBit = 0;
             }
 
             pointer = (pointer + 1) % NUM_FRAMES;
-            if (pointer == start) {
-                break;
+        } while (pointer != start);
+
+        if (!replaced) {
+            PageFrame *frame = &memory[pointer];
+            if (frame->mBit == 1) {
+                printf("Escrevendo pagina %d de volta para o disco\n", frame->pageNum);
             }
+            printf("Substituindo pagina %d por %d\n", frame->pageNum, pageNum);
+            frame->pageNum = pageNum;
+            frame->mBit = rand() % 2;
+            frame->rBit = 1;
+            frame->lastTime = time;
+            pointer = (pointer + 1) % NUM_FRAMES;
         }
     }
 }
