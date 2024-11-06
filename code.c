@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define NUM_FRAMES 8
+#define NUM_FRAMES 3
 #define K 5 
 
 typedef struct {
@@ -27,7 +27,6 @@ void initMemory() {
 void updateMemory(int pageNum, int time) {
     int found = 0;
 
-   
     for (int i = 0; i < NUM_FRAMES; i++) {
         if (memory[i].pageNum == pageNum) {
             memory[i].rBit = 1; 
@@ -39,20 +38,15 @@ void updateMemory(int pageNum, int time) {
     }
 
     if (!found) {
-
         int start = pointer;
         while (1) {
             PageFrame *frame = &memory[pointer];
 
-   
             if (frame->rBit == 1) {
                 frame->rBit = 0; 
                 pointer = (pointer + 1) % NUM_FRAMES; 
-            }
-         
-            else if (time - frame->lastTime > K) {
+            } else if (time - frame->lastTime > K) {
                 if (frame->mBit == 1) {
-               
                     printf("Escrevendo pagina %d de volta para o disco\n", frame->pageNum);
                 }
                 printf("Substituindo pagina %d por %d\n", frame->pageNum, pageNum);
@@ -63,17 +57,9 @@ void updateMemory(int pageNum, int time) {
                 pointer = (pointer + 1) % NUM_FRAMES; 
                 break;
             }
-           
-            pointer = (pointer + 1) % NUM_FRAMES;
 
-       
+            pointer = (pointer + 1) % NUM_FRAMES;
             if (pointer == start) {
-                printf("Nenhuma pagina fora do conjunto de trabalho substituindo pagina %d\n", memory[pointer].pageNum);
-                memory[pointer].pageNum = pageNum;
-                memory[pointer].mBit = rand() % 2;
-                memory[pointer].rBit = 1;
-                memory[pointer].lastTime = time;
-                pointer = (pointer + 1) % NUM_FRAMES;
                 break;
             }
         }
@@ -90,12 +76,15 @@ int main() {
     for (int i = 0; i < numReferences; i++) {
         time++;
         updateMemory(pageReferences[i], time);
-    }
-
-    printf("\nEstado da memoria apos as referencias\n");
-    for (int i = 0; i < NUM_FRAMES; i++) {
-        printf("Memory %d Page = %d mBit = %d rBit = %d lastTime = %d\n", 
-                i, memory[i].pageNum, memory[i].mBit, memory[i].rBit, memory[i].lastTime);
+        
+        printf("Estado da memoria apos referencia %d: ", pageReferences[i]);
+        for (int j = 0; j < NUM_FRAMES; j++) {
+            if (memory[j].pageNum == -1)
+                printf("[ - ] ");
+            else
+                printf("[ %d ] ", memory[j].pageNum);
+        }
+        printf("\n");
     }
 
     return 0;
