@@ -12,7 +12,7 @@ typedef struct {
     int pageNum;
 } PageFrame;
 
-int pointer = 0;
+int pont = 0;
 PageFrame memory[NUM_FRAMES];
 
 void initMemory() {
@@ -38,11 +38,11 @@ void updateMemory(int pageNum, int time) {
     }
 
     if (!found) {
-        int start = pointer;
-        bool replaced = false;
+        int start = pont;
+        bool r = false;
 
-        do {
-            PageFrame *frame = &memory[pointer];
+        while (pont != start) {
+            PageFrame *frame = &memory[pont];
 
             if (frame->rBit == 0 && (time - frame->lastTime > K)) {
                 if (frame->mBit == 1) {
@@ -53,18 +53,18 @@ void updateMemory(int pageNum, int time) {
                 frame->mBit = rand() % 2;
                 frame->rBit = 1;
                 frame->lastTime = time;
-                pointer = (pointer + 1) % NUM_FRAMES;
-                replaced = true;
+                pont = (pont + 1) % NUM_FRAMES;
+                r = true;
                 break;
             } else if (frame->rBit == 1) {
                 frame->rBit = 0;
             }
 
-            pointer = (pointer + 1) % NUM_FRAMES;
-        } while (pointer != start);
+            pont = (pont + 1) % NUM_FRAMES;
+        } 
 
-        if (!replaced) {
-            PageFrame *frame = &memory[pointer];
+        if (!r) {
+            PageFrame *frame = &memory[pont];
             if (frame->mBit == 1) {
                 printf("Escrevendo pagina %d de volta para o disco\n", frame->pageNum);
             }
@@ -73,7 +73,7 @@ void updateMemory(int pageNum, int time) {
             frame->mBit = rand() % 2;
             frame->rBit = 1;
             frame->lastTime = time;
-            pointer = (pointer + 1) % NUM_FRAMES;
+            pont = (pont + 1) % NUM_FRAMES;
         }
     }
 }
@@ -94,7 +94,7 @@ int main() {
             if (memory[j].pageNum == -1)
                 printf("[ - ] ");
             else
-                printf("[ %d ] ", memory[j].pageNum);
+                printf("[ %d | bit r:%d ] ", memory[j].pageNum, memory[j].rBit);
         }
         printf("\n");
     }
